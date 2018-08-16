@@ -12,8 +12,10 @@ import android.widget.Button;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private static final String TAG = MainActivity.class.getSimpleName();
+    private static final int NOTIFICATION_ID = 1;
 
     private Button mNotificationButton;
+    private Button mCancelNotificationButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,7 +24,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Log.d(TAG, "--> onCreate");
 
         mNotificationButton = findViewById(R.id.notification_button);
+        mCancelNotificationButton = findViewById(R.id.cancel_notification);
         mNotificationButton.setOnClickListener(this);
+        mCancelNotificationButton.setOnClickListener(this);
 
         Log.d(TAG, "<-- onCreate");
 
@@ -31,19 +35,34 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View view) {
         Log.d(TAG, "onClick");
-        NotificationCompat.Builder builder =
-                new NotificationCompat.Builder(this)
-                        .setSmallIcon(R.mipmap.ic_launcher)
-                        .setContentTitle("Notification")
-                        .setContentText("It's example of notification text");
-
-        Notification notification = builder.build();
 
         NotificationManager notificationManager =
                 (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 
-        if (notificationManager != null) {
-            notificationManager.notify(1, notification);
+        switch (view.getId()){
+            case R.id.notification_button:
+                Log.d(TAG, "Notification showed");
+                NotificationCompat.Builder builder =
+                        new NotificationCompat.Builder(this)
+                                .setSmallIcon(R.mipmap.ic_launcher)
+                                .setContentTitle("Notification")
+                                .setContentText("It's example of notification text");
+
+                Notification notification = builder.build();
+
+                if (notificationManager != null) {
+                    notificationManager.notify(NOTIFICATION_ID, notification);
+                }
+                break;
+            case R.id.cancel_notification:
+                Log.d(TAG, "Notification cancelled");
+
+                if (notificationManager != null) {
+                    notificationManager.cancel(NOTIFICATION_ID);
+                }
+                break;
         }
+
+
     }
 }
