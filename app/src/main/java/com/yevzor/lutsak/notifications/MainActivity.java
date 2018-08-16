@@ -2,6 +2,8 @@ package com.yevzor.lutsak.notifications;
 
 import android.app.Notification;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -13,6 +15,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private static final String TAG = MainActivity.class.getSimpleName();
     private static final int NOTIFICATION_ID = 1;
+    private static final int REQUEST_CODE = 0;
 
     private Button mNotificationButton;
     private Button mCancelNotificationButton;
@@ -42,10 +45,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch (view.getId()){
             case R.id.notification_button:
                 Log.d(TAG, "Notification showed");
+
+                Intent intent = new Intent(this, MainActivity.class);
+                PendingIntent pendingIntent =
+                        PendingIntent.getActivity(
+                                this,
+                                REQUEST_CODE,
+                                intent,
+                                PendingIntent.FLAG_UPDATE_CURRENT);
+
                 NotificationCompat.Builder builder =
                         new NotificationCompat.Builder(this)
                                 .setSmallIcon(R.mipmap.ic_launcher)
                                 .setContentTitle("Notification")
+                                .setContentIntent(pendingIntent)
                                 .setContentText("It's example of notification text");
 
                 Notification notification = builder.build();
